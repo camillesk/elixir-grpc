@@ -2,20 +2,34 @@
 
 **TODO: Add description**
 
+Tutorial found on: https://blog.appsignal.com/2020/03/24/how-to-use-grpc-in-elixir.html
+
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `grpc_elixir` to your list of dependencies in `mix.exs`:
+**TODO**
 
-```elixir
-def deps do
-  [
-    {:grpc_elixir, "~> 0.1.0"}
-  ]
-end
+## Request Examples
+
+```bash
+
+$ grpcurl -plaintext -proto grpc_elixir.proto -d '{"first_name": "Bob", "last_name": "Smith", "age": 40}' localhost:50051 grpc_elixir.User.Create
+{
+  "id": 1,
+  "firstName": "Bob",
+  "lastName": "Smith",
+  "age": 40
+}
+
+$ grpcurl -plaintext -proto grpc_elixir.proto -d '{"id": 1}' localhost:50051 grpc_elixir.User.Get
+{
+  "firstName": "Bob",
+  "lastName": "Smith",
+  "age": 40
+}
+
+$ grpcurl -plaintext -proto grpc_elixir.proto -d '{"id": 2}' localhost:50051 grpc_elixir.User.Get
+ERROR:
+  Code: NotFound
+  Message: Some requested entity (e.g., file or directory) was not found
+
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/grpc_elixir](https://hexdocs.pm/grpc_elixir).
-

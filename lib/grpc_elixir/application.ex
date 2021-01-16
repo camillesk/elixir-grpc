@@ -12,6 +12,11 @@ defmodule GrpcElixir.Application do
       # {GrpcElixir.Worker, arg}
     ]
 
+    children = [
+      UserDB,
+      {GRPC.Server.Supervisor, {GrpcElixir.Endpoint, 50051}}
+    ]
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: GrpcElixir.Supervisor]

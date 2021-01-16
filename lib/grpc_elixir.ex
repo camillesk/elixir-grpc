@@ -1,18 +1,31 @@
-defmodule GrpcElixir do
-  @moduledoc """
-  Documentation for `GrpcElixir`.
-  """
+defmodule GrpcElixir.Endpoint do
+  use GRPC.Endpoint
 
-  @doc """
-  Hello world.
+  intercept(GRPC.Logger.Server)
+  run(GrpcElixir.User.Server)
+end
 
-  ## Examples
+defmodule GrpcElixir.User.Server do
+  use GRPC.Server, service: GrpcElixir.User.Service
 
-      iex> GrpcElixir.hello()
-      :world
+  def create(request, _stream) do
+    new_user =
+      UserDB.add_user(%{
+        first_name: request.first_name,
+        last_name: request.last_name,
+        age: request.age
+      })
 
-  """
-  def hello do
-    :world
+    GrpcElixir.UserReply.new(new_user)
+  end
+
+  def get(request, _stream) do
+    user = UserDB.get_user(request.id)
+
+    if user == nil do
+      raise GRPC.RPCError, status: :not_found
+    else
+      GrpcElixir.UserReply.new(user)
+    end
   end
 end
